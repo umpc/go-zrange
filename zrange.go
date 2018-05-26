@@ -42,9 +42,9 @@ func precalcRadiusToBits() []float64 {
 //
 func RadialRange(params RadialRangeParams) HashRanges {
 	return params.
-		setDefaults().
-		findNeighboringRanges().
-		combineRanges()
+		SetDefaults().
+		FindNeighboringRanges().
+		CombineRanges()
 }
 
 // RadialRangeParams defaults to expecting 64-bit geohash-encoded keys.
@@ -55,7 +55,8 @@ type RadialRangeParams struct {
 	Longitude float64
 }
 
-func (params RadialRangeParams) setDefaults() RadialRangeParams {
+// SetDefaults sets the default values for the RadialRangeParams type.
+func (params RadialRangeParams) SetDefaults() RadialRangeParams {
 	if params.BitsOfPrecision == 0 {
 		params.BitsOfPrecision = 64
 	}
@@ -74,7 +75,8 @@ func (params RadialRangeParams) radiusToBits() uint {
 	return uint(initialSignificantBits)
 }
 
-func (params RadialRangeParams) findNeighboringRanges() HashRanges {
+// FindNeighboringRanges uses the radius and coordinates to find neighboring hash ranges.
+func (params RadialRangeParams) FindNeighboringRanges() HashRanges {
 	rangeBits := params.radiusToBits()
 
 	queryPoint := geohash.EncodeIntWithPrecision(
@@ -87,12 +89,12 @@ func (params RadialRangeParams) findNeighboringRanges() HashRanges {
 	neighborList = append(neighborList, queryPoint)
 
 	rangeBitsDiff := params.BitsOfPrecision - rangeBits
-	return neighborList.expandRanges(rangeBitsDiff)
+	return neighborList.shiftRanges(rangeBitsDiff)
 }
 
 type neighbors []uint64
 
-func (neighborList neighbors) expandRanges(rangeBitsDiff uint) HashRanges {
+func (neighborList neighbors) shiftRanges(rangeBitsDiff uint) HashRanges {
 	hashRangeList := make(HashRanges, 0, len(neighborList))
 
 	for _, neighbor := range neighborList {
@@ -135,7 +137,8 @@ type HashRange struct {
 // used for performing range queries.
 type HashRanges []HashRange
 
-func (hashRangeList HashRanges) combineRanges() HashRanges {
+// CombineRanges merges each overlapping range.
+func (hashRangeList HashRanges) CombineRanges() HashRanges {
 	sort.Sort(hashRangesMinAscSorter(hashRangeList))
 
 	combinedHashRangeList := hashRangeList[:0]
