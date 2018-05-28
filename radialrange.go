@@ -46,7 +46,7 @@ func (params RadialRangeParams) radiusToBits() uint {
 
 	for i := len(radiusToBits) - 1; i > 0; i-- {
 		if params.Radius < radiusToBits[i] {
-			return uint(i*2 + initialSignificantBits)
+			return uint(2*i + initialSignificantBits)
 		}
 	}
 
@@ -54,7 +54,9 @@ func (params RadialRangeParams) radiusToBits() uint {
 }
 
 // FindNeighborsWithRadius uses the radius and coordinates to find neighboring
-// hash ranges.
+// hash ranges. SetDefaults should be called before use. RadialRange should be
+// used instead of calling this method directly, unless more customized behavior
+// is desired.
 func (params RadialRangeParams) FindNeighborsWithRadius() HashRanges {
 	rangeBits := params.radiusToBits()
 

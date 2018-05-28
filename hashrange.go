@@ -12,7 +12,9 @@ type HashRange struct {
 type HashRanges []HashRange
 
 // SortMinAsc sorts a list of hash ranges in ascending order by their items'
-// Min fields.
+// Min fields. SetDefaults, and typically FindNeighborsWithRadius, should be called
+// before use. RadialRange should be used instead of calling this method directly,
+// unless more customized behavior is desired.
 func (hashRangeList HashRanges) SortMinAsc() HashRanges {
 	sort.Sort(hashRangesMinAscSorter(hashRangeList))
 	return hashRangeList
@@ -20,9 +22,11 @@ func (hashRangeList HashRanges) SortMinAsc() HashRanges {
 
 // CombineRanges merges each overlapping range.
 // The input list of hash ranges are expected to be sorted in ascending order by
-// their items' Min fields.
+// their items' Min fields. SetDefaults, and typically FindNeighborsWithRadius
+// and SortMinAsc, should be called before use. RadialRange should be used instead
+// of calling this method directly, unless more customized behavior is desired.
 func (hashRangeList HashRanges) CombineRanges() HashRanges {
-	combinedHashRangeList := hashRangeList[:0]
+	combinedList := hashRangeList[:0]
 
 	for i := 0; i < len(hashRangeList)-1; i++ {
 		hashRange := hashRangeList[i]
@@ -37,10 +41,10 @@ func (hashRangeList HashRanges) CombineRanges() HashRanges {
 			continue
 		}
 
-		combinedHashRangeList = append(combinedHashRangeList, hashRange)
+		combinedList = append(combinedList, hashRange)
 	}
 
-	return append(combinedHashRangeList, hashRangeList[len(hashRangeList)-1])
+	return append(combinedList, hashRangeList[len(hashRangeList)-1])
 }
 
 type hashRangesMinAscSorter HashRanges

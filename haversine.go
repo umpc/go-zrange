@@ -4,7 +4,9 @@ import "math"
 
 // Haversine returns the great circle distance between two latitude/longitude
 // points in kilometers.
+//
 // Derived from: https://web.archive.org/web/20180528040024/https://community.esri.com/groups/coordinate-reference-systems/blog/2017/10/05/haversine-formula
+//
 func Haversine(lat1, lng1, lat2, lng2 float64) float64 {
 	phi1 := degToRad(lat1)
 	phi2 := degToRad(lat2)
