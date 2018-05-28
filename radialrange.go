@@ -70,3 +70,20 @@ func (params RadialRangeParams) FindNeighborsWithRadius() HashRanges {
 	rangeBitsDiff := params.BitsOfPrecision - rangeBits
 	return neighborList.shiftIntoRanges(rangeBitsDiff)
 }
+
+// WithinRadius determines if a Geohash is within the specified radius.
+// Its potential benefits are dependent on the data model in use.
+func (params RadialRangeParams) WithinRadius(geohashID uint64) bool {
+	params = params.SetDefaults()
+
+	latitude, longitude := geohash.DecodeIntWithPrecision(
+		geohashID,
+		params.BitsOfPrecision,
+	)
+	distanceKm := Haversine(
+		params.Latitude, params.Longitude,
+		latitude, longitude,
+	)
+
+	return distanceKm < params.Radius
+}
