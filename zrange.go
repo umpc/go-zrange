@@ -1,7 +1,7 @@
 // Package zrange implements an efficient algorithm for performing geospatial
 // range queries with Geohash-encoded keys and a search radius.
 //
-// The `RadialRange` method appears to be sufficient for range queries of around
+// The RadialRange method appears to be sufficient for range queries of around
 // 5,000km or less. Changes that efficiently add support for larger query ranges
 // are welcome.
 //
