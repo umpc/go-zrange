@@ -14,11 +14,15 @@ The `RadialRange` method appears to be sufficient for range queries of around 5,
 ## Example usage
 
 ```go
-keyRanges := zrange.RadialRange(zrange.RadialRangeParams{
+...
+
+rangeParams := zrange.RadialRangeParams{
   Radius:    32.18688,
   Latitude:  37.334722,
   Longitude: -122.008889,
-})
+}
+
+keyRanges := rangeParams.RadialRange()
 
 ...
 ```

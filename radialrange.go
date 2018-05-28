@@ -17,7 +17,7 @@ import "github.com/mmcloughlin/geohash"
 //
 // • Handling overflows resulting from bitshifting, such as when querying for: (-90, -180)
 //
-func RadialRange(params RadialRangeParams) HashRanges {
+func (params RadialRangeParams) RadialRange() HashRanges {
 	return params.
 		SetDefaults().
 		FindNeighborsWithRadius().
